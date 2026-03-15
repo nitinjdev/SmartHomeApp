@@ -12,7 +12,7 @@ const Loader: React.FC<Props> = ({ visible = true, message }) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color={LoaderColor} />
+      <ActivityIndicator testID="loader" size="large" color={LoaderColor} />
       {message && <Text style={styles.text}>{message}</Text>}
     </View>
   );

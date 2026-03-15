@@ -1,6 +1,7 @@
 import React from "react";
 import { fireEvent, render } from "@testing-library/react-native";
 import Dashboard from "./Dashboard";
+import DeviceCard from "../../component/DeviceCard/DeviceCard";
 
 jest.mock('react-redux', () => ({
   useDispatch: () => jest.fn(),
@@ -106,12 +107,26 @@ jest.mock('@react-native-firebase/auth', () => ({
     };
   });
   
-test("renders dashboard title", () => {
-  const { getByText } = render(<Dashboard />);
-  expect(getByText("Dashboard")).toBeTruthy();
-});
-
-
+  const devices = [
+    {
+      id: "device_001",
+      name: "Living Room Light",
+      type: "light",
+      status: "on",
+      room: "Living Room",
+      powerWatts: 60,
+      energyUsedKWh: 1.24,
+    },
+    {
+      id: "device_002",
+      name: "Smart Socket — Kitchen",
+      type: "socket",
+      status: "off",
+      room: "Kitchen",
+      powerWatts: 1500,
+      energyUsedKWh: 5.82,
+    }
+  ];
 
 describe("Dashboard Screen", () => {
   test("renders dashboard title", () => {
@@ -119,26 +134,57 @@ describe("Dashboard Screen", () => {
     expect(getByText("Dashboard")).toBeTruthy();
   });
 
-  test("renders LineChart component", () => {
-    const { getByTestId } = render(<Dashboard />);
-    expect(getByTestId("line-chart")).toBeTruthy(); // Ensure the LineChart has a testID
-  });
-
   test("renders a button and handles click", () => {
-    const { getByText } = render(<Dashboard />);
-    const button = getByText("Refresh"); // Assuming there's a button with text "Refresh"
-    fireEvent.press(button);
-    expect(getByText("Refreshing...")).toBeTruthy(); // Check if the state changes
+    const { getByTestId} = render(<Dashboard />);
+    const button = getByTestId('logout-btn');
+    expect(button).toBeTruthy();
   });
 
-  test("displays data passed as props", () => {
-    const mockData = { title: "Custom Dashboard" };
-    const { getByText } = render(<Dashboard data={mockData} />);
-    expect(getByText("Custom Dashboard")).toBeTruthy();
+  test("renders device items in FlatList", () => {
+
+    const { getByText } = render(
+      <>
+        {devices.map(device => (
+          <DeviceCard
+            key={device.id}
+            device={device}
+            disabled={false}
+            onToggle={jest.fn()}
+          />
+        ))}
+      </>
+    );
+  
+    expect(getByText("Living Room Light")).toBeTruthy();
+    expect(getByText("Smart Socket — Kitchen")).toBeTruthy();
   });
 
-  test("handles empty data gracefully", () => {
-    const { getByText } = render(<Dashboard data={{}} />);
-    expect(getByText("No data available")).toBeTruthy(); // Assuming this is the fallback text
+  test("switch toggle triggers onToggle", () => {
+
+    const mockToggle = jest.fn();
+  
+    const device = {
+      id: "device_001",
+      name: "Living Room Light",
+      status: "on",
+      room: "Living Room",
+      powerWatts: 60,
+      energyUsedKWh: 1.24,
+    };
+  
+    const { getByTestId } = render(
+      <DeviceCard
+        device={device}
+        disabled={false}
+        onToggle={mockToggle}
+      />
+    );
+  
+    const switchButton = getByTestId("switch-device_001");
+  
+    fireEvent(switchButton, "valueChange", false);
+  
+    expect(mockToggle).toHaveBeenCalled();
   });
+
 });

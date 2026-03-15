@@ -111,7 +111,7 @@ function Dashboard() {
         <View style={{ flex: 1 }}>
             <View style={{ marginTop:30, flexDirection:'row', marginHorizontal:20, justifyContent:'space-between'}}>
             <CustomText value='Dashboard' fontSize={24} fontWeight='400' color={primaryColor}/>
-            <Pressable style={{backgroundColor:'grey', padding:10, borderRadius:10}} onPress={onLogout}>
+            <Pressable testID='logout-btn' style={{backgroundColor:'grey', padding:10, borderRadius:10}} onPress={onLogout}>
                 <CustomText value={LocalString.LOGOUT} fontSize={12} fontWeight='700' color={primaryColor}/>
             </Pressable>
             </View>

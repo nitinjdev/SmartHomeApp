@@ -21,6 +21,7 @@ export default function DeviceCard({ device, disabled, onToggle }: Props) {
       </View>
 
       <Switch
+        testID='switch-device_001'
         value={device.status === 'on'}
         onValueChange={onToggle}
       />

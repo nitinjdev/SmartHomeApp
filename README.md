@@ -137,8 +137,9 @@ Sensitive information such as tokens and credentials are stored securely using:
 # Known Limitations
 
 1. The project currently supports **Android only**.
-2. Offline synchronization is limited without additional caching mechanisms.
+2. Internationalization (i18n) support can be added.
 3. Error handling can be improved.
+4. Responsive UI for all the devices along with Tabs
 
 ---
 
